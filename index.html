@@ -703,12 +703,12 @@
     .valor .icono { width: 22px; height: 22px; padding: 0.23rem; border-radius: 50%; color: var(--verde-oscuro); background: var(--verde-suave); box-sizing: content-box; }
 
     /* Portafolio */
-    .galeria { display: grid; grid-template-columns: 1fr; gap: 1rem; }
+    .galeria { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
     .portafolio-item {
       position: relative;
       display: block;
       width: 100%;
-      aspect-ratio: 4 / 3;
+      aspect-ratio: 3 / 4;
       padding: 0;
       overflow: hidden;
       border: 0;
@@ -717,21 +717,11 @@
       box-shadow: var(--sombra-sm);
       text-align: left;
       cursor: zoom-in;
+      transition: box-shadow 0.3s ease;
     }
-    .portafolio-item img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; }
-    .portafolio-item:hover img, .portafolio-item:focus-visible img { transform: scale(1.04); }
-    .portafolio-caption {
-      position: absolute;
-      right: 0;
-      bottom: 0;
-      left: 0;
-      padding: 2.5rem 1rem 0.9rem;
-      color: var(--blanco);
-      background: linear-gradient(transparent, rgba(30, 24, 16, 0.78));
-      font-size: 0.82rem;
-      font-weight: 800;
-      line-height: 1.35;
-    }
+    .portafolio-item:hover, .portafolio-item:focus-visible { box-shadow: var(--sombra-md); }
+    .portafolio-item img { width: 100%; height: 100%; object-fit: contain; object-position: center; }
+    .portafolio-caption { display: none; }
     .portafolio-item.is-fallback { cursor: default; }
     .portafolio-fallback {
       position: absolute;
@@ -760,16 +750,10 @@
     .portafolio__pie { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1rem; margin-top: 1.6rem; }
     .portafolio__pie p { max-width: 640px; margin: 0; color: var(--marron); font-size: 0.88rem; }
     @media (min-width: 640px) {
-      .galeria { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-      .portafolio-item:first-child { grid-column: span 2; aspect-ratio: 16 / 9; }
+      .galeria { grid-template-columns: repeat(3, minmax(0, 1fr)); }
     }
     @media (min-width: 960px) {
-      .galeria { grid-template-columns: repeat(6, minmax(0, 1fr)); }
-      .portafolio-item:first-child,
-      .portafolio-item:nth-child(2) { grid-column: span 3; aspect-ratio: 16 / 9; }
-      .portafolio-item:nth-child(3),
-      .portafolio-item:nth-child(4),
-      .portafolio-item:nth-child(5) { grid-column: span 2; aspect-ratio: 4 / 3; }
+      .galeria { grid-template-columns: repeat(4, minmax(0, 1fr)); }
     }
 
     /* Lightbox */
@@ -794,7 +778,7 @@
       background: var(--blanco);
       box-shadow: 0 30px 80px rgba(0, 0, 0, 0.45);
     }
-    .lightbox__caption { margin: 0; color: var(--crema); font-size: 0.94rem; font-weight: 700; text-align: center; }
+    .lightbox__caption { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); clip-path: inset(50%); white-space: nowrap; border: 0; }
     .lightbox__cerrar, .lightbox__nav {
       display: grid;
       place-items: center;
@@ -1503,7 +1487,7 @@
         <div class="galeria" id="galeria" aria-label="Galería de libretas personalizadas"></div>
 
         <div class="portafolio__pie reveal">
-          <p>Las fotografías son ejemplos editables. Puedes reemplazarlas por imágenes reales de tus libretas en la carpeta <strong>portafolio/</strong>.</p>
+          <p>Una selección de libretas personalizadas creadas para empresas y organizaciones. Cada pieza se adapta a tus colores, tamaños y estilo.</p>
           <a class="boton boton--naranja boton--pequeno" href="https://wa.me/573204785462?text=Hola%20Eco%20School%2C%20vi%20el%20portafolio%20y%20quiero%20cotizar%20mi%20libreta." target="_blank" rel="noopener noreferrer">
             <svg class="icono" aria-hidden="true"><use href="#ico-whatsapp"></use></svg>
             Quiero la mía
@@ -1632,6 +1616,7 @@
 
         <div class="pie__columna pie__datos">
           <h3>Información de contacto</h3>
+          <p><strong>Dirección:</strong> Cll 54 Sur #31-96</p>
           <p><strong>NIT:</strong> 600 240 134</p>
           <p><strong>Representante legal:</strong> Julian Ortiz</p>
           <p><strong>Teléfonos:</strong><br>
@@ -1667,7 +1652,7 @@
       <button class="lightbox__nav lightbox__nav--anterior" id="lightbox-anterior" type="button" aria-label="Imagen anterior" hidden>
         <svg class="icono" aria-hidden="true"><use href="#ico-chevron-izquierda"></use></svg>
       </button>
-      <img class="lightbox__imagen" id="lightbox-imagen" src="" alt="">
+      <img class="lightbox__imagen" id="lightbox-imagen" alt="">
       <p class="lightbox__caption" id="lightbox-caption"></p>
       <button class="lightbox__nav lightbox__nav--siguiente" id="lightbox-siguiente" type="button" aria-label="Imagen siguiente" hidden>
         <svg class="icono" aria-hidden="true"><use href="#ico-chevron-derecha"></use></svg>
@@ -1685,29 +1670,59 @@
          ====================================================================== */
       const imagenesPortafolio = [
         {
-          src: "portafolio/libreta1.jpg",
-          alt: "Libreta anillada de papel de caña de azúcar con portada ilustrada",
-          titulo: "Libreta con portada ilustrada"
+          src: "portafolio/empresa1.png",
+          alt: "Libreta personalizada Empresa 1 de Eco School",
+          titulo: "Empresa 1"
         },
         {
-          src: "portafolio/libreta2.jpg",
-          alt: "Libreta personalizada con diseño DTF en tonos cálidos",
-          titulo: "Diseño DTF personalizado"
+          src: "portafolio/empresa2.png",
+          alt: "Libreta personalizada Empresa 2 de Eco School",
+          titulo: "Empresa 2"
         },
         {
-          src: "portafolio/libreta3.jpg",
-          alt: "Libreta sostenible con separadores de segunda mano",
-          titulo: "Separadores de segunda mano"
+          src: "portafolio/empresa3.png",
+          alt: "Libreta personalizada Empresa 3 de Eco School",
+          titulo: "Empresa 3"
         },
         {
-          src: "portafolio/libreta4.jpg",
-          alt: "Libreta artesanal con anillado y acabados naturales",
-          titulo: "Acabados naturales"
+          src: "portafolio/empresa4.png",
+          alt: "Libreta personalizada Empresa 4 de Eco School",
+          titulo: "Empresa 4"
         },
         {
-          src: "portafolio/libreta5.jpg",
-          alt: "Detalle de libreta ecológica personalizada de Eco School",
-          titulo: "Detalle personalizado"
+          src: "portafolio/empresa5.png",
+          alt: "Libreta personalizada Empresa 5 de Eco School",
+          titulo: "Empresa 5"
+        },
+        {
+          src: "portafolio/empresa6.png",
+          alt: "Libreta personalizada Empresa 6 de Eco School",
+          titulo: "Empresa 6"
+        },
+        {
+          src: "portafolio/empresa7.png",
+          alt: "Libreta personalizada Empresa 7 de Eco School",
+          titulo: "Empresa 7"
+        },
+        {
+          src: "portafolio/empresa8.png",
+          alt: "Libreta personalizada Empresa 8 de Eco School",
+          titulo: "Empresa 8"
+        },
+        {
+          src: "portafolio/empresa9.png",
+          alt: "Libreta personalizada Empresa 9 de Eco School",
+          titulo: "Empresa 9"
+        },
+        {
+          src: "portafolio/empresa10.png",
+          alt: "Libreta personalizada Empresa 10 de Eco School",
+          titulo: "Empresa 10"
+        },
+        {
+          src: "portafolio/empresa11.png",
+          alt: "Libreta personalizada Empresa 11 de Eco School",
+          titulo: "Empresa 11"
         }
       ];
 
